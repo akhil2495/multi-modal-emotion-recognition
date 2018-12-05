@@ -17,7 +17,7 @@ class LSTM_AE():
         
 	def train(self, sequence, val_split=0.2, epochs=60):
 		self.AE.compile(optimizer='adam', loss='mse')
-		history = self.AE.fit(sequence, sequence, validation_split=val_split, nb_epochs=epochs)
+		history = self.AE.fit(sequence, sequence, validation_split=val_split, nb_epoch=epochs)
 		self.encoder = Model(self.AE.inputs, self.AE.get_layer("encoder").output)
 		return history
 
@@ -40,7 +40,7 @@ class LSTM_dim():
 
 	def train(self, in_seq, out_seq, val_split=0.2, epochs=100):
 		self.dim_LSTM.compile(optimizer='adam', loss='mse')
-		history = self.dim_LSTM.fit(in_seq, out_seq, validation_split=val_split, nb_epochs=epochs)
+		history = self.dim_LSTM.fit(in_seq, out_seq, validation_split=val_split, nb_epoch=epochs)
 		self.rep = Model(self.dim_LSTM.inputs, self.dim_LSTM.get_layer('representation').output)
 		return history
 
@@ -62,7 +62,7 @@ class LSTM_cat():
 
 	def train(self, in_seq, out_seq, val_split=0.2, epochs=30):
 		self.cat_LSTM.compile(optimizer='adam', loss='categorical_crossentropy')
-		history = self.cat_LSTM.fit(in_seq, out_seq, validation_split=val_split, nb_epochs=epochs, shuffle=True)
+		history = self.cat_LSTM.fit(in_seq, out_seq, validation_split=val_split, nb_epoch=epochs, shuffle=True)
 		self.rep = Model(self.cat_LSTM.inputs, self.cat_LSTM.get_layer('representation').output)
 		return history
 

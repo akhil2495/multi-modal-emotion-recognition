@@ -21,3 +21,5 @@
 
 * [Feature-fusion](https://github.com/makhilbabu/multi-modal-emotion-recognition/blob/master/speech/classifiers.ipynb)
   * Neural Network Embedding
+
+* Run feature_extraction.py by mentioning what features to extract from it. Then use classifier.ipynb to evaluate these features.

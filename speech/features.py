@@ -32,7 +32,7 @@ class speech_feat_extract():
 
         def parse_groundtruth(fpath):
             with open(fpath) as fil:
-	        for line in fil:
+                for line in fil:
                     if line.startswith('['):
                         words = line.rstrip().split('\t')
                         self.id2label[words[1]] = words[2]
@@ -57,8 +57,8 @@ class speech_feat_extract():
 
     def pad_sequence_into_array(self, Xs, maxlen=200, truncating='post', padding='post', value=0.):
 
-    	Nsamples = len(Xs)
-    	if maxlen is None:
+        Nsamples = len(Xs)
+        if maxlen is None:
             lengths = [s.shape[0] for s in Xs]    # 'sequences' must be list, 's' must be numpy array, len(s) return the first dimension of s
             maxlen = np.max(lengths)
 
@@ -271,10 +271,10 @@ class speech_feat_extract():
                 self.compute_zcr()
                 X = self.zcr
         
-        X_mean = np.empty((0,60), float)
-        X_var = np.empty((0,60), float)
-        X_min = np.empty((0,60), float)
-        X_max = np.empty((0,60), float)
+        X_mean = np.empty((0,X.shape[1]), float)
+        X_var = np.empty((0,X.shape[1]), float)
+        X_min = np.empty((0,X.shape[1]), float)
+        X_max = np.empty((0,X.shape[1]), float)
         label = []
         fnames = []
         for k,v in X.items():
@@ -288,21 +288,19 @@ class speech_feat_extract():
             X_max = np.concatenate((X_max, np.reshape(A, (-1, A.shape[0]))), axis=0)
             label.append(self.cat2catid[self.id2label[k]])
             fnames.append(k)
-                
+
+        feat_stat = np.concatenate((X_mean, X_var, X_min, X_max), axis=1)
+        self.label = label
+        self.fnames = fnames
         if feat == 'mfcc':
-            mfcc_stat = np.concatenate((X_mean, X_var), axis = 1)
-            mfcc_stat = np.concatenate((mfcc_stat, X_min), axis = 1)
-            self.mfcc_stat = np.concatenate((mfcc_stat, X_max), axis = 1)
-            self.label = label
-            self.fnames = fnames
+            self.mfcc_stat = feat_stat
             if save:
-                with open('feat/mfcc_stat.pkl', 'wb') as f:
+                with open('feat/' + feat + '_stat.pkl', 'wb') as f:
                     pickle.dump(self.mfcc_stat, f)
-        elif feat == 'zcr':
-            zcr_stat = np.concatenate((X_mean, X_var), axis=1)
-            zcr_stat = np.concatenate((zcr_stat, X_min), axis = 1)
-            self.zcr_stat = np.concatenate((zcr_stat, X_max), axis = 1)
-            self.label = label
+        elif feat == 'lpcc':
+            self.lpcc_stat = feat_stat
             if save:
-                with open('feat/zcr_stat.pkl', 'wb') as f:
-                    pickle.dump(self.zcr_stat, f)
+                with open('feat/' + feat + '_stat.pkl', 'wb') as f:
+                    pickle.dump(self.lpcc_stat, f)
+        elif feat == 'zcr':
+            self.zcr_stat = zcr_stat
