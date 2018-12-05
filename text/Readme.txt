@@ -1,1 +1,8 @@
-Use this file for text feature development for emotion recogntiion
+# Text Emotion Recognition and Feature Extraction in IEMOCAP
+
+**This part contains**
+* Text Feature Extraction Techniques
+  * Doc2Vec
+  * Skip-Thought vector
+  * Sent2vec
+* Detailed Report
